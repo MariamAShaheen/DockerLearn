@@ -1,0 +1,20 @@
+version: '3'
+services:
+  db:
+    image: postgres:9.6-alpine
+    environment:
+      POSTGRES_USER: rails-docker # to solve  not finding role in postgres
+      POSTGRES_PASSWORD: test_db_password
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+  web:
+    build: .
+    environment:
+      - PGHOST=db # to solve  not finding role in postgres
+      - PGUSER=postgres
+    # volumes: # to solve yarn issue
+    #   - .:/application
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
